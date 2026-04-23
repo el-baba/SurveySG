@@ -70,28 +70,36 @@ export type PersonaProfile = {
   planningArea: string;
   subzone?: string;
   traits?: string;
+  occupation?: string;
+  skillsList?: string;
+  personaDescription?: string;
 };
 
 export function buildPersonaAnswerPrompt(profiles: PersonaProfile[], question: string): string {
   const personaList = profiles
-    .map(
-      (p, i) =>
+    .map((p, i) => {
+      let line =
         `${i + 1}. ID: ${p.id} | ${p.name}, ${p.sex}, age ${p.age}, ` +
-        `${p.maritalStatus}, education: ${p.educationLevel}, from ${p.subzone ?? p.planningArea}` +
-        (p.traits ? `. Traits: ${p.traits}` : "")
-    )
+        `${p.maritalStatus}, education: ${p.educationLevel}, from ${p.subzone ?? p.planningArea}`;
+      if (p.occupation) line += `, occupation: ${p.occupation}`;
+      if (p.skillsList) line += `. Skills: ${p.skillsList}`;
+      if (p.personaDescription) line += `. Background: ${p.personaDescription}`;
+      if (p.traits) line += `. Traits: ${p.traits}`;
+      return line;
+    })
     .join("\n");
 
   return `Below are ${profiles.length} Singaporean personas. Answer the question IN CHARACTER as EACH persona.
 
 Reply ONLY with valid JSON in this exact format:
-{"answers": [{"personaId": "...", "name": "...", "answer": "..."}, ...]}
+{"answers": [{"personaId": "...", "name": "...", "answer": "...", "sentiment": "positive"}, ...]}
 
 Rules:
 - Each answer must be under 80 words
 - Use Singlish naturally (lah, leh, lor, sia, aiyo, etc.)
-- Reflect each persona's age, education level, marital status, and neighbourhood
+- Reflect each persona's age, education level, marital status, neighbourhood, occupation, and background
 - Be casual and direct, not formal
+- Include a "sentiment" field: "positive" if the persona views the topic favourably, "negative" if unfavourably
 - Do NOT include any text outside the JSON
 
 QUESTION: ${question}

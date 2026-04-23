@@ -1,5 +1,6 @@
 "use client";
 
+import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { PersonaAnswer } from "@/store/filterStore";
 
 const AVATAR_COLORS = [
@@ -51,6 +52,13 @@ export function PersonaCard({ answer }: { answer: PersonaAnswer }) {
             </span>
             <span className="text-white/25 text-[10px] truncate">{answer.planningArea}</span>
           </div>
+        </div>
+        <div className="flex-shrink-0 ml-1">
+          {answer.sentiment === "positive" ? (
+            <ThumbsUp size={14} className="text-green-400" />
+          ) : (
+            <ThumbsDown size={14} className="text-red-400" />
+          )}
         </div>
       </div>
 

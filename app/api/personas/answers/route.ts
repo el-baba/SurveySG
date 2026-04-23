@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   let query = supabase
     .from("personas")
-    .select("id,name,sex,age,marital_status,education_level,planning_area,subzone,traits")
+    .select("id,name,sex,age,marital_status,education_level,occupation,skills_and_expertise_list,persona,planning_area,subzone,traits")
     .limit(50);
 
   query = applyFiltersToQuery(query, filters);
@@ -48,6 +48,9 @@ export async function POST(req: NextRequest) {
     planningArea: p.planning_area ?? "Singapore",
     subzone: p.subzone ?? undefined,
     traits: p.traits ? JSON.stringify(p.traits) : undefined,
+    occupation: p.occupation ?? undefined,
+    skillsList: p.skills_and_expertise_list ?? undefined,
+    personaDescription: p.persona ?? undefined,
   }));
 
   try {
@@ -58,13 +61,13 @@ export async function POST(req: NextRequest) {
         { role: "user", content: buildPersonaAnswerPrompt(profiles, question) },
       ],
       response_format: { type: "json_object" },
-      max_tokens: n * 120,
+      max_tokens: n * 140,
       temperature: 0.85,
     });
 
     const raw = completion.choices[0]?.message?.content ?? "{}";
     const parsed = JSON.parse(raw);
-    const rawAnswers: Array<{ personaId: string; name: string; answer: string }> =
+    const rawAnswers: Array<{ personaId: string; name: string; answer: string; sentiment: string }> =
       parsed.answers ?? [];
 
     // Enrich with demographic info from sample
@@ -78,6 +81,7 @@ export async function POST(req: NextRequest) {
         sex: p?.sex ?? "?",
         planningArea: p?.planningArea ?? "Singapore",
         answer: a.answer,
+        sentiment: (a.sentiment === "negative" ? "negative" : "positive") as "positive" | "negative",
       };
     });
 

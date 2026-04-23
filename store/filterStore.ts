@@ -8,6 +8,7 @@ export type PersonaAnswer = {
   sex: string;
   planningArea: string;
   answer: string;
+  sentiment: "positive" | "negative";
 };
 
 type FilterStore = FilterState & {
