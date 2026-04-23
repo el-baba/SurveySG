@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
 
   let query = supabase
     .from("personas")
-    .select("sex,age,ethnicity,occupation");
+    .select("sex,age,marital_status,education_level");
 
   query = applyFiltersToQuery(query, filters);
 
@@ -33,21 +33,11 @@ export async function GET(req: NextRequest) {
     if (row.sex) sexSplit[row.sex] = (sexSplit[row.sex] ?? 0) + 1;
   }
 
-  // Ethnicity split
-  const ethnicitySplit: Record<string, number> = {};
+  // Education level split
+  const educationSplit: Record<string, number> = {};
   for (const row of rows) {
-    if (row.ethnicity) ethnicitySplit[row.ethnicity] = (ethnicitySplit[row.ethnicity] ?? 0) + 1;
+    if (row.education_level) educationSplit[row.education_level] = (educationSplit[row.education_level] ?? 0) + 1;
   }
-
-  // Top occupations
-  const occCount: Record<string, number> = {};
-  for (const row of rows) {
-    if (row.occupation) occCount[row.occupation] = (occCount[row.occupation] ?? 0) + 1;
-  }
-  const topOccupations = Object.entries(occCount)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 10)
-    .map(([name, count]) => ({ name, count }));
 
   return NextResponse.json({
     total: rows.length,
@@ -55,7 +45,6 @@ export async function GET(req: NextRequest) {
       .sort(([a], [b]) => parseInt(a) - parseInt(b))
       .map(([bucket, count]) => ({ bucket, count })),
     sexSplit: Object.entries(sexSplit).map(([name, value]) => ({ name, value })),
-    ethnicitySplit: Object.entries(ethnicitySplit).map(([name, value]) => ({ name, value })),
-    topOccupations,
+    educationSplit: Object.entries(educationSplit).map(([name, value]) => ({ name, value })),
   });
 }

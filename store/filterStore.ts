@@ -6,8 +6,6 @@ export type PersonaAnswer = {
   name: string;
   age: number;
   sex: string;
-  ethnicity: string;
-  occupation: string;
   planningArea: string;
   answer: string;
 };
@@ -15,10 +13,8 @@ export type PersonaAnswer = {
 type FilterStore = FilterState & {
   setSex: (sex: Sex) => void;
   setAgeRange: (min: number, max: number) => void;
-  setEthnicity: (values: string[]) => void;
-  setReligion: (values: string[]) => void;
   setMaritalStatus: (values: string[]) => void;
-  setOccupation: (values: string[]) => void;
+  setEducationLevel: (values: string[]) => void;
   setRegion: (region: string | null) => void;
   setPlanningArea: (area: string | null) => void;
   setSubzone: (subzone: string | null) => void;
@@ -48,10 +44,8 @@ export const useFilterStore = create<FilterStore>((set) => ({
 
   setSex: (sex) => set({ sex }),
   setAgeRange: (ageMin, ageMax) => set({ ageMin, ageMax }),
-  setEthnicity: (ethnicity) => set({ ethnicity }),
-  setReligion: (religion) => set({ religion }),
   setMaritalStatus: (maritalStatus) => set({ maritalStatus }),
-  setOccupation: (occupation) => set({ occupation }),
+  setEducationLevel: (educationLevel) => set({ educationLevel }),
   setRegion: (region) => set({ region, planningArea: null, subzone: null }),
   setPlanningArea: (planningArea) => set({ planningArea, subzone: null }),
   setSubzone: (subzone) => set({ subzone }),

@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   let query = supabase
     .from("personas")
-    .select("name,sex,age,ethnicity,religion,marital_status,occupation,planning_area,subzone,traits")
+    .select("name,sex,age,marital_status,education_level,planning_area,subzone,traits")
     .limit(MAX_PERSONAS_FOR_CHAT);
 
   query = applyFiltersToQuery(query, filters);
@@ -30,8 +30,8 @@ export async function POST(req: NextRequest) {
     .map(
       (p, i) =>
         `Persona ${i + 1}: ${p.name ?? "Unknown"}, ${p.sex ?? "?"}, age ${p.age ?? "?"}, ` +
-        `${p.ethnicity ?? "?"}, ${p.religion ?? "?"}, ${p.marital_status ?? "?"}, ` +
-        `${p.occupation ?? "?"}, from ${p.subzone ?? p.planning_area ?? "Singapore"}.`
+        `${p.marital_status ?? "?"}, education: ${p.education_level ?? "?"}, ` +
+        `from ${p.subzone ?? p.planning_area ?? "Singapore"}.`
     )
     .join("\n");
 
