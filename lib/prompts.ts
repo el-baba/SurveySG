@@ -40,9 +40,9 @@ CONCISENESS:
 - No need for formal intro or conclusion — just answer directly.
 
 CHARACTER:
-- Reflect the persona's age, ethnicity, occupation, and neighbourhood.
-- An elderly retiree in Ang Mo Kio sounds different from a 25-year-old banker in CBD.
-- A hawker stall owner has different concerns than an NUS student.`;
+- Reflect the persona's age, education level, marital status, and neighbourhood.
+- An elderly retiree in Ang Mo Kio sounds different from a 25-year-old degree holder in CBD.
+- A less-educated senior has different concerns than a postgraduate student.`;
 
 // ---- SECTION 2: AGGREGATE PROMPT BUILDER --------------------
 // Replaces the hardcoded system prompt in /api/chat/route.ts.
@@ -65,8 +65,8 @@ export type PersonaProfile = {
   name: string;
   sex: string;
   age: number;
-  ethnicity: string;
-  occupation: string;
+  maritalStatus: string;
+  educationLevel: string;
   planningArea: string;
   subzone?: string;
   traits?: string;
@@ -76,8 +76,8 @@ export function buildPersonaAnswerPrompt(profiles: PersonaProfile[], question: s
   const personaList = profiles
     .map(
       (p, i) =>
-        `${i + 1}. ID: ${p.id} | ${p.name}, ${p.sex}, age ${p.age}, ${p.ethnicity}, ` +
-        `${p.occupation}, from ${p.subzone ?? p.planningArea}` +
+        `${i + 1}. ID: ${p.id} | ${p.name}, ${p.sex}, age ${p.age}, ` +
+        `${p.maritalStatus}, education: ${p.educationLevel}, from ${p.subzone ?? p.planningArea}` +
         (p.traits ? `. Traits: ${p.traits}` : "")
     )
     .join("\n");
@@ -90,7 +90,7 @@ Reply ONLY with valid JSON in this exact format:
 Rules:
 - Each answer must be under 80 words
 - Use Singlish naturally (lah, leh, lor, sia, aiyo, etc.)
-- Reflect each persona's age, ethnicity, occupation, and neighbourhood
+- Reflect each persona's age, education level, marital status, and neighbourhood
 - Be casual and direct, not formal
 - Do NOT include any text outside the JSON
 

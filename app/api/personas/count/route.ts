@@ -14,9 +14,8 @@ export async function GET(req: NextRequest) {
     p_sex: p.get("sex") ?? null,
     p_age_min: p.get("ageMin") ? Number(p.get("ageMin")) : null,
     p_age_max: p.get("ageMax") ? Number(p.get("ageMax")) : null,
-    p_ethnicity: p.get("ethnicity") ? p.get("ethnicity")!.split(",") : null,
-    p_religion: p.get("religion") ? p.get("religion")!.split(",") : null,
     p_marital_status: p.get("maritalStatus") ? p.get("maritalStatus")!.split(",") : null,
+    p_education_level: p.get("educationLevel") ? p.get("educationLevel")!.split(",") : null,
     p_planning_area: p.get("planningArea") ?? null,
     p_subzone: p.get("subzone") ?? null,
   };

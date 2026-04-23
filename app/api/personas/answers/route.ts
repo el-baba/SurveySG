@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   let query = supabase
     .from("personas")
-    .select("id,name,sex,age,ethnicity,occupation,planning_area,subzone,traits")
+    .select("id,name,sex,age,marital_status,education_level,planning_area,subzone,traits")
     .limit(50);
 
   query = applyFiltersToQuery(query, filters);
@@ -43,8 +43,8 @@ export async function POST(req: NextRequest) {
     name: p.name ?? "Unknown",
     sex: p.sex ?? "?",
     age: p.age ?? 0,
-    ethnicity: p.ethnicity ?? "?",
-    occupation: p.occupation ?? "?",
+    maritalStatus: p.marital_status ?? "?",
+    educationLevel: p.education_level ?? "?",
     planningArea: p.planning_area ?? "Singapore",
     subzone: p.subzone ?? undefined,
     traits: p.traits ? JSON.stringify(p.traits) : undefined,
@@ -76,8 +76,6 @@ export async function POST(req: NextRequest) {
         name: a.name,
         age: p?.age ?? 0,
         sex: p?.sex ?? "?",
-        ethnicity: p?.ethnicity ?? "?",
-        occupation: p?.occupation ?? "?",
         planningArea: p?.planningArea ?? "Singapore",
         answer: a.answer,
       };

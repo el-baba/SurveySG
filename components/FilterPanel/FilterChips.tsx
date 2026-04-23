@@ -7,10 +7,8 @@ export function FilterChips() {
   const {
     sex, setSex,
     ageMin, ageMax, setAgeRange,
-    ethnicity, setEthnicity,
-    religion, setReligion,
     maritalStatus, setMaritalStatus,
-    occupation, setOccupation,
+    educationLevel, setEducationLevel,
     planningArea, setPlanningArea,
     subzone, setSubzone,
   } = useFilterStore();
@@ -20,17 +18,11 @@ export function FilterChips() {
   if (sex !== "All") chips.push({ label: `Sex: ${sex}`, onRemove: () => setSex("All") });
   if (ageMin > 0 || ageMax < 100)
     chips.push({ label: `Age: ${ageMin}–${ageMax}`, onRemove: () => setAgeRange(0, 100) });
-  ethnicity.forEach((e) =>
-    chips.push({ label: e, onRemove: () => setEthnicity(ethnicity.filter((x) => x !== e)) })
-  );
-  religion.forEach((r) =>
-    chips.push({ label: r, onRemove: () => setReligion(religion.filter((x) => x !== r)) })
-  );
   maritalStatus.forEach((m) =>
     chips.push({ label: m, onRemove: () => setMaritalStatus(maritalStatus.filter((x) => x !== m)) })
   );
-  occupation.forEach((o) =>
-    chips.push({ label: `Job: ${o}`, onRemove: () => setOccupation(occupation.filter((x) => x !== o)) })
+  educationLevel.forEach((e) =>
+    chips.push({ label: e, onRemove: () => setEducationLevel(educationLevel.filter((x) => x !== e)) })
   );
   if (subzone) chips.push({ label: `Zone: ${subzone}`, onRemove: () => setSubzone(null) });
   else if (planningArea)

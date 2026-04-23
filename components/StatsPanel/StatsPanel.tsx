@@ -5,7 +5,6 @@ import { useFilterStore } from "@/store/filterStore";
 import { filtersToSearchParams } from "@/lib/filters";
 import { AgeChart } from "./AgeChart";
 import { EthnicityDonut } from "./EthnicityDonut";
-import { OccupationChart } from "./OccupationChart";
 
 export function StatsPanel() {
   const filters = useFilterStore();
@@ -47,14 +46,11 @@ export function StatsPanel() {
           <ChartSection label="Sex">
             <EthnicityDonut data={data.sexSplit} />
           </ChartSection>
-          <ChartSection label="Ethnicity">
-            <EthnicityDonut data={data.ethnicitySplit} />
+          <ChartSection label="Education Level">
+            <EthnicityDonut data={data.educationSplit} />
           </ChartSection>
           <ChartSection label="Age Distribution">
             <AgeChart data={data.ageBuckets} />
-          </ChartSection>
-          <ChartSection label="Top Occupations">
-            <OccupationChart data={data.topOccupations} />
           </ChartSection>
         </>
       ) : (

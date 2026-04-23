@@ -3,20 +3,23 @@
 import { useState } from "react";
 import { SlidersHorizontal, X, ChevronDown, ChevronUp } from "lucide-react";
 import { useFilterStore } from "@/store/filterStore";
-import { ETHNICITY_OPTIONS, MARITAL_STATUS_OPTIONS, Sex } from "@/lib/filters";
+import { MARITAL_STATUS_OPTIONS, EDUCATION_LEVEL_OPTIONS, Sex } from "@/lib/filters";
 import { AgeRangeSlider } from "./AgeRangeSlider";
-import { MultiSelect } from "./MultiSelect";
 import { FilterChips } from "./FilterChips";
+
+const SEX_OPTIONS: { value: Sex; label: string }[] = [
+  { value: "All", label: "All" },
+  { value: "Female", label: "🙎‍♀️" },
+  { value: "Male", label: "👨‍💼" },
+];
 
 export function FilterPanel() {
   const [collapsed, setCollapsed] = useState(false);
   const {
     sex, setSex,
     ageMin, ageMax, setAgeRange,
-    ethnicity, setEthnicity,
-    religion, setReligion,
     maritalStatus, setMaritalStatus,
-    occupation, setOccupation,
+    educationLevel, setEducationLevel,
     resetFilters,
   } = useFilterStore();
 
@@ -24,10 +27,8 @@ export function FilterPanel() {
     sex !== "All" ||
     ageMin > 0 ||
     ageMax < 100 ||
-    ethnicity.length > 0 ||
-    religion.length > 0 ||
     maritalStatus.length > 0 ||
-    occupation.length > 0;
+    educationLevel.length > 0;
 
   return (
     <div
@@ -75,17 +76,17 @@ export function FilterPanel() {
           {/* Sex */}
           <FilterSection label="Sex">
             <div className="flex gap-2">
-              {(["All", "Male", "Female"] as Sex[]).map((s) => (
+              {SEX_OPTIONS.map(({ value, label }) => (
                 <button
-                  key={s}
-                  onClick={() => setSex(s)}
+                  key={value}
+                  onClick={() => setSex(value)}
                   className={`flex-1 py-1 rounded-lg text-xs font-medium transition-colors ${
-                    sex === s
+                    sex === value
                       ? "bg-white/15 text-white"
                       : "bg-white/5 text-white/40 hover:bg-white/10"
                   }`}
                 >
-                  {s}
+                  {label}
                 </button>
               ))}
             </div>
@@ -97,44 +98,6 @@ export function FilterPanel() {
               min={ageMin}
               max={ageMax}
               onChange={setAgeRange}
-            />
-          </FilterSection>
-
-          {/* Ethnicity */}
-          <FilterSection label="Ethnicity">
-            <div className="flex flex-wrap gap-1.5">
-              {ETHNICITY_OPTIONS.map((eth) => (
-                <button
-                  key={eth}
-                  onClick={() =>
-                    setEthnicity(
-                      ethnicity.includes(eth)
-                        ? ethnicity.filter((e) => e !== eth)
-                        : [...ethnicity, eth]
-                    )
-                  }
-                  className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
-                    ethnicity.includes(eth)
-                      ? "bg-white/15 text-white"
-                      : "bg-white/5 text-white/40 hover:bg-white/10"
-                  }`}
-                >
-                  {eth}
-                </button>
-              ))}
-            </div>
-          </FilterSection>
-
-          {/* Religion */}
-          <FilterSection label="Religion">
-            <MultiSelect
-              options={[
-                "Buddhist", "Christian", "Muslim", "Hindu", "Taoist",
-                "No Religion", "Others",
-              ]}
-              selected={religion}
-              onChange={setReligion}
-              placeholder="Select religion..."
             />
           </FilterSection>
 
@@ -163,15 +126,27 @@ export function FilterPanel() {
             </div>
           </FilterSection>
 
-          {/* Occupation */}
-          <FilterSection label="Occupation">
-            <MultiSelect
-              options={[]}
-              selected={occupation}
-              onChange={setOccupation}
-              placeholder="Search occupation..."
-              freeInput
-            />
+          {/* Education Level */}
+          <FilterSection label="Education Level">
+            <select
+              value={educationLevel[0] ?? ""}
+              onChange={(e) =>
+                setEducationLevel(e.target.value ? [e.target.value] : [])
+              }
+              className="w-full rounded-lg px-3 py-1.5 text-xs font-medium transition-colors cursor-pointer"
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                color: educationLevel.length ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.4)",
+              }}
+            >
+              <option value="">Any level...</option>
+              {EDUCATION_LEVEL_OPTIONS.map((opt) => (
+                <option key={opt} value={opt} style={{ background: "#1a1a2e", color: "#fff" }}>
+                  {opt}
+                </option>
+              ))}
+            </select>
           </FilterSection>
         </div>
       )}

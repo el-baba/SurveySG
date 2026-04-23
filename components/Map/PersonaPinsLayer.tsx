@@ -32,8 +32,6 @@ type Persona = {
   name: string;
   age: number;
   sex: string;
-  ethnicity: string;
-  occupation: string;
   planning_area: string;
 };
 
@@ -49,7 +47,7 @@ export function PersonaPinsLayer() {
   const params = filtersToSearchParams(filters);
   const { data: personas } = useQuery<Persona[]>({
     queryKey: ["personas", "pins", params.toString()],
-    queryFn: () => fetch(`/api/personas/sample?n=100&${params}`).then((r) => r.json()),
+    queryFn: () => fetch(`/api/personas/sample?n=200&${params}`).then((r) => r.json()),
     placeholderData: [],
   });
 
@@ -74,8 +72,6 @@ export function PersonaPinsLayer() {
           name: p.name,
           age: p.age,
           sex: p.sex,
-          ethnicity: p.ethnicity,
-          occupation: p.occupation,
           planningArea: p.planning_area,
         },
       };
