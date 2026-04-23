@@ -42,9 +42,9 @@ export function PersonaCard({ answer }: { answer: PersonaAnswer }) {
           {getInitials(answer.name)}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-slate-100 text-xs font-semibold truncate">{answer.name}</p>
+          <p className="text-white/90 text-xs font-semibold truncate">{answer.name}</p>
           <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-            <span className="text-slate-400 text-[10px]">
+            <span className="text-white/40 text-[10px]">
               {answer.age} · {answer.sex}
             </span>
             <span
@@ -56,13 +56,13 @@ export function PersonaCard({ answer }: { answer: PersonaAnswer }) {
             >
               {answer.ethnicity}
             </span>
-            <span className="text-slate-500 text-[10px] truncate">{occupation}</span>
+            <span className="text-white/30 text-[10px] truncate">{occupation}</span>
           </div>
         </div>
       </div>
 
       {/* Answer text */}
-      <p className="text-slate-200 text-xs leading-relaxed">{answer.answer}</p>
+      <p className="text-white/70 text-xs leading-relaxed">{answer.answer}</p>
     </div>
   );
 }

@@ -47,7 +47,7 @@ export function RightPanel() {
       {/* Panel header with area name + close */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 flex-shrink-0">
         <div>
-          <p className="font-semibold text-slate-100 text-sm">
+          <p className="font-semibold text-white/90 text-sm">
             {selectedArea ?? "Voices"}
           </p>
         </div>
@@ -57,7 +57,7 @@ export function RightPanel() {
             setPlanningArea(null);
             clearPersonaAnswers();
           }}
-          className="text-slate-400 hover:text-slate-200 transition-colors"
+          className="text-white/30 hover:text-white/70 transition-colors"
         >
           <X size={16} />
         </button>
@@ -106,8 +106,8 @@ function TabButton({
       disabled={disabled}
       className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed ${
         active
-          ? "bg-blue-500/20 text-blue-300 border border-blue-500/30"
-          : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+          ? "bg-white/10 text-white border border-white/15"
+          : "text-white/40 hover:text-white/70 hover:bg-white/5"
       }`}
     >
       {children}

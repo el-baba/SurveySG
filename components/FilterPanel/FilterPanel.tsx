@@ -42,11 +42,11 @@ export function FilterPanel() {
     >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-        <div className="flex items-center gap-2 font-semibold text-slate-100">
-          <SlidersHorizontal size={16} className="text-blue-400" />
+        <div className="flex items-center gap-2 font-semibold text-white/90">
+          <SlidersHorizontal size={16} className="text-white/50" />
           <span>Filters</span>
           {hasFilters && (
-            <span className="ml-1 px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-xs font-bold">
+            <span className="ml-1 px-1.5 py-0.5 rounded-full bg-white/15 text-white/80 text-xs font-bold">
               active
             </span>
           )}
@@ -55,7 +55,7 @@ export function FilterPanel() {
           {hasFilters && (
             <button
               onClick={resetFilters}
-              className="text-slate-400 hover:text-red-400 transition-colors"
+              className="text-white/30 hover:text-red-400 transition-colors"
               title="Reset all filters"
             >
               <X size={14} />
@@ -63,7 +63,7 @@ export function FilterPanel() {
           )}
           <button
             onClick={() => setCollapsed((c) => !c)}
-            className="text-slate-400 hover:text-slate-200 transition-colors"
+            className="text-white/30 hover:text-white/70 transition-colors"
           >
             {collapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
           </button>
@@ -81,8 +81,8 @@ export function FilterPanel() {
                   onClick={() => setSex(s)}
                   className={`flex-1 py-1 rounded-lg text-xs font-medium transition-colors ${
                     sex === s
-                      ? "bg-blue-500 text-white"
-                      : "bg-white/5 text-slate-400 hover:bg-white/10"
+                      ? "bg-white/15 text-white"
+                      : "bg-white/5 text-white/40 hover:bg-white/10"
                   }`}
                 >
                   {s}
@@ -115,8 +115,8 @@ export function FilterPanel() {
                   }
                   className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
                     ethnicity.includes(eth)
-                      ? "bg-blue-500 text-white"
-                      : "bg-white/5 text-slate-400 hover:bg-white/10"
+                      ? "bg-white/15 text-white"
+                      : "bg-white/5 text-white/40 hover:bg-white/10"
                   }`}
                 >
                   {eth}
@@ -153,8 +153,8 @@ export function FilterPanel() {
                   }
                   className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
                     maritalStatus.includes(m)
-                      ? "bg-blue-500 text-white"
-                      : "bg-white/5 text-slate-400 hover:bg-white/10"
+                      ? "bg-white/15 text-white"
+                      : "bg-white/5 text-white/40 hover:bg-white/10"
                   }`}
                 >
                   {m}
@@ -189,7 +189,7 @@ export function FilterPanel() {
 function FilterSection({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
-      <p className="text-xs uppercase tracking-wider text-slate-400/70 font-medium">{label}</p>
+      <p className="text-xs uppercase tracking-wider text-white/30 font-medium">{label}</p>
       {children}
     </div>
   );

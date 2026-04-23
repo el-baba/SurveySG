@@ -28,9 +28,9 @@ export function AgeRangeSlider({ min, max, onChange }: Props) {
   return (
     <div className="flex flex-col gap-2">
       <div className="relative h-4 flex items-center">
-        <div className="absolute w-full h-1.5 rounded-full bg-slate-700" />
+        <div className="absolute w-full h-1.5 rounded-full bg-white/15" />
         <div
-          className="absolute h-1.5 rounded-full bg-blue-500"
+          className="absolute h-1.5 rounded-full bg-white/60"
           style={{
             left: `${min}%`,
             right: `${100 - max}%`,
@@ -55,7 +55,7 @@ export function AgeRangeSlider({ min, max, onChange }: Props) {
           style={{ zIndex: 4 }}
         />
       </div>
-      <div className="flex justify-between text-xs text-slate-500">
+      <div className="flex justify-between text-xs text-white/30">
         <span>{min}</span>
         <span>{max}</span>
       </div>

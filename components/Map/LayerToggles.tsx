@@ -22,20 +22,20 @@ export function LayerToggles() {
         boxShadow: "var(--glass-shadow)",
       }}
     >
-      <p className="text-xs uppercase tracking-widest text-slate-500 font-medium mb-1">Layers</p>
+      <p className="text-xs uppercase tracking-widest text-white/25 font-medium mb-1">Layers</p>
       {layers.map((layer) => (
         <label key={layer.label} className="flex items-center gap-3 cursor-pointer select-none">
           <span
             className="w-3 h-3 rounded-full flex-shrink-0"
             style={{ background: layer.color }}
           />
-          <span className="text-slate-200">{layer.label}</span>
+          <span className="text-white/70">{layer.label}</span>
           <button
             role="switch"
             aria-checked={layer.active}
             onClick={layer.toggle}
             className={`ml-auto relative w-9 h-5 rounded-full transition-colors duration-200 ${
-              layer.active ? "bg-blue-500" : "bg-slate-700"
+              layer.active ? "bg-white/30" : "bg-white/10"
             }`}
           >
             <span

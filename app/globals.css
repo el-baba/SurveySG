@@ -2,32 +2,20 @@
 @import "mapbox-gl/dist/mapbox-gl.css";
 
 :root {
-  --background: #0f172a;
-  --foreground: #f1f5f9;
+  --background: #000000;
+  --foreground: #f5f5f5;
 
-  /* Glass layer tokens */
-  --glass-bg: rgba(15, 23, 42, 0.60);
-  --glass-bg-heavy: rgba(15, 23, 42, 0.82);
-  --glass-border: rgba(148, 163, 184, 0.12);
-  --glass-border-highlight: rgba(255, 255, 255, 0.08);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  /* Black glass tokens */
+  --glass-bg: rgba(0, 0, 0, 0.60);
+  --glass-bg-heavy: rgba(8, 8, 8, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-highlight: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 8px 40px rgba(0, 0, 0, 0.70), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
   /* Legacy aliases */
   --panel-bg: var(--glass-bg-heavy);
   --panel-border: var(--glass-border);
   --font-sans: var(--font-geist);
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #f0f4f8;
-    --foreground: #0f172a;
-    --glass-bg: rgba(255, 255, 255, 0.55);
-    --glass-bg-heavy: rgba(255, 255, 255, 0.80);
-    --glass-border: rgba(15, 23, 42, 0.10);
-    --glass-border-highlight: rgba(255, 255, 255, 0.70);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.80);
-  }
 }
 
 html, body, #__next {

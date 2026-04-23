@@ -22,33 +22,78 @@ function SkeletonCard() {
   );
 }
 
+function SummarySkeleton() {
+  return (
+    <div className="animate-pulse space-y-2 py-1">
+      <div className="h-2.5 w-full bg-white/8 rounded" />
+      <div className="h-2.5 w-11/12 bg-white/8 rounded" />
+      <div className="h-2.5 w-4/5 bg-white/8 rounded" />
+    </div>
+  );
+}
+
 export function PersonaAnswersPanel() {
-  const { personaAnswers, isLoadingAnswers, currentQuestion, clearPersonaAnswers } =
-    useFilterStore();
+  const {
+    personaAnswers,
+    isLoadingAnswers,
+    currentQuestion,
+    clearPersonaAnswers,
+    summaryText,
+    isSummaryLoading,
+  } = useFilterStore();
 
   const questionDisplay =
     currentQuestion.length > 60
       ? currentQuestion.slice(0, 60) + "…"
       : currentQuestion;
 
+  const showSummarySection = isSummaryLoading || summaryText;
+
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
       <div className="px-4 py-3 border-b border-white/10 flex-shrink-0">
         {currentQuestion && (
-          <p className="text-slate-200 text-xs font-medium leading-relaxed">
+          <p className="text-white/80 text-xs font-medium leading-relaxed">
             &ldquo;{questionDisplay}&rdquo;
           </p>
         )}
-        <p className="text-slate-500 text-[10px] mt-0.5">
+        <p className="text-white/30 text-[10px] mt-0.5">
           {isLoadingAnswers
             ? "Getting individual responses…"
             : `${personaAnswers.length} persona${personaAnswers.length !== 1 ? "s" : ""} answered`}
         </p>
       </div>
 
-      {/* Cards */}
-      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 min-h-0">
+        {/* Summary block */}
+        {showSummarySection && (
+          <div
+            className="rounded-xl p-3"
+            style={{
+              background: "rgba(255,255,255,0.04)",
+              borderLeft: "2px solid rgba(255,255,255,0.15)",
+              paddingLeft: "12px",
+            }}
+          >
+            <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">
+              Summary
+            </p>
+            {isSummaryLoading && !summaryText ? (
+              <SummarySkeleton />
+            ) : (
+              <p className="text-white/70 text-xs leading-relaxed">
+                {summaryText}
+                {isSummaryLoading && (
+                  <span className="inline-block w-0.5 h-3 bg-white/50 ml-0.5 animate-pulse align-middle" />
+                )}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Persona cards */}
         {isLoadingAnswers ? (
           <>
             <SkeletonCard />
@@ -58,11 +103,13 @@ export function PersonaAnswersPanel() {
         ) : personaAnswers.length > 0 ? (
           personaAnswers.map((a) => <PersonaCard key={a.personaId} answer={a} />)
         ) : (
-          <div className="flex items-center justify-center h-20">
-            <p className="text-slate-500 text-xs text-center">
-              No responses yet. Ask a question to hear from individual personas.
-            </p>
-          </div>
+          !showSummarySection && (
+            <div className="flex items-center justify-center h-20">
+              <p className="text-white/30 text-xs text-center">
+                No responses yet. Ask a question to hear from individual personas.
+              </p>
+            </div>
+          )
         )}
       </div>
 
@@ -71,7 +118,7 @@ export function PersonaAnswersPanel() {
         <div className="px-4 py-2 border-t border-white/10 flex-shrink-0">
           <button
             onClick={clearPersonaAnswers}
-            className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+            className="text-xs text-white/25 hover:text-white/60 transition-colors"
           >
             Clear responses
           </button>

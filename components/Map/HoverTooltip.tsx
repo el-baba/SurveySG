@@ -16,7 +16,7 @@ export function HoverTooltip({ feature }: { feature: NonNullable<HoveredFeature>
       }}
     >
       <p className="font-semibold">{feature.name}</p>
-      <p className="text-slate-400 text-xs">{feature.personaCount} personas</p>
+      <p className="text-white/40 text-xs">{feature.personaCount} personas</p>
     </div>
   );
 }

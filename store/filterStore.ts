@@ -43,6 +43,11 @@ type FilterStore = FilterState & {
   setCurrentQuestion: (q: string) => void;
   setShowAnswersPanel: (show: boolean) => void;
   clearPersonaAnswers: () => void;
+  // Summary (aggregate synthesis)
+  summaryText: string;
+  isSummaryLoading: boolean;
+  setSummaryText: (t: string) => void;
+  setIsSummaryLoading: (v: boolean) => void;
 };
 
 export const useFilterStore = create<FilterStore>((set) => ({
@@ -78,5 +83,10 @@ export const useFilterStore = create<FilterStore>((set) => ({
   setCurrentQuestion: (currentQuestion) => set({ currentQuestion }),
   setShowAnswersPanel: (showAnswersPanel) => set({ showAnswersPanel }),
   clearPersonaAnswers: () =>
-    set({ personaAnswers: [], showAnswersPanel: false, currentQuestion: "" }),
+    set({ personaAnswers: [], showAnswersPanel: false, currentQuestion: "", summaryText: "", isSummaryLoading: false }),
+
+  summaryText: "",
+  isSummaryLoading: false,
+  setSummaryText: (summaryText) => set({ summaryText }),
+  setIsSummaryLoading: (isSummaryLoading) => set({ isSummaryLoading }),
 }));

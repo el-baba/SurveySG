@@ -46,7 +46,7 @@ export function MultiSelect({ options, selected, onChange, placeholder, freeInpu
           {selected.map((s) => (
             <span
               key={s}
-              className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-xs"
+              className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 text-white/70 text-xs"
             >
               {s}
               <button onClick={() => toggle(s)}>
@@ -66,24 +66,24 @@ export function MultiSelect({ options, selected, onChange, placeholder, freeInpu
           onBlur={() => setTimeout(() => setOpen(false), 150)}
           onKeyDown={handleInputKeyDown}
           placeholder={placeholder}
-          className="w-full bg-white/5 text-slate-200 text-xs rounded-lg px-3 py-2 pr-7 outline-none border border-white/10 focus:border-blue-500/60 transition-colors placeholder:text-slate-600"
+          className="w-full bg-white/5 text-white/80 text-xs rounded-lg px-3 py-2 pr-7 outline-none border border-white/10 focus:border-white/30 transition-colors placeholder:text-white/25"
         />
         <ChevronDown
           size={12}
-          className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
+          className="absolute right-2 top-1/2 -translate-y-1/2 text-white/25 pointer-events-none"
         />
       </div>
 
       {/* Dropdown */}
       {open && (filtered.length > 0 || (freeInput && search.trim())) && (
-        <div className="absolute top-full left-0 right-0 mt-1 rounded-lg bg-slate-900/95 border border-white/10 shadow-xl z-30 max-h-36 overflow-y-auto backdrop-blur-sm">
+        <div className="absolute top-full left-0 right-0 mt-1 rounded-lg bg-black/95 border border-white/10 shadow-xl z-30 max-h-36 overflow-y-auto backdrop-blur-sm">
           {freeInput && search.trim() && !selected.includes(search.trim()) && (
             <button
               onMouseDown={() => {
                 onChange([...selected, search.trim()]);
                 setSearch("");
               }}
-              className="w-full text-left px-3 py-2 text-xs text-blue-400 hover:bg-white/5"
+              className="w-full text-left px-3 py-2 text-xs text-white/50 hover:bg-white/5"
             >
               Add &quot;{search.trim()}&quot;
             </button>
@@ -92,7 +92,7 @@ export function MultiSelect({ options, selected, onChange, placeholder, freeInpu
             <button
               key={o}
               onMouseDown={() => toggle(o)}
-              className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-white/5"
+              className="w-full text-left px-3 py-2 text-xs text-white/60 hover:bg-white/5"
             >
               {o}
             </button>

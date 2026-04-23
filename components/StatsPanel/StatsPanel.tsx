@@ -24,7 +24,7 @@ export function StatsPanel() {
   if (!selectedArea) {
     return (
       <div className="flex items-center justify-center h-40">
-        <p className="text-slate-500 text-xs text-center px-4">
+        <p className="text-white/30 text-xs text-center px-4">
           Click a planning area or subzone on the map to see demographics.
         </p>
       </div>
@@ -34,7 +34,7 @@ export function StatsPanel() {
   return (
     <div className="px-4 py-4 space-y-6">
       {data && (
-        <p className="text-xs text-slate-500">{data.total} matching personas</p>
+        <p className="text-xs text-white/30">{data.total} matching personas</p>
       )}
       {isLoading ? (
         <div className="space-y-3">
@@ -58,7 +58,7 @@ export function StatsPanel() {
           </ChartSection>
         </>
       ) : (
-        <p className="text-slate-500 text-xs">No data available.</p>
+        <p className="text-white/30 text-xs">No data available.</p>
       )}
     </div>
   );
@@ -67,7 +67,7 @@ export function StatsPanel() {
 function ChartSection({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-wider text-slate-500 font-medium mb-2">{label}</p>
+      <p className="text-xs uppercase tracking-wider text-white/30 font-medium mb-2">{label}</p>
       {children}
     </div>
   );

@@ -81,7 +81,7 @@ export function MapContainer() {
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   if (!token) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-slate-900 text-slate-400">
+      <div className="w-full h-full flex items-center justify-center bg-black/90 text-white/40">
         <p>Add NEXT_PUBLIC_MAPBOX_TOKEN to .env.local to display the map.</p>
       </div>
     );

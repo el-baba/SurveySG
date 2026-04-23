@@ -43,7 +43,7 @@ export function FilterChips() {
       {chips.map((chip) => (
         <span
           key={chip.label}
-          className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-xs border border-blue-500/30"
+          className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 text-white/70 text-xs border border-white/15"
         >
           {chip.label}
           <button onClick={chip.onRemove} className="hover:text-white transition-colors">
