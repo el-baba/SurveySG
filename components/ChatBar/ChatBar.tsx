@@ -136,6 +136,38 @@ export function ChatBar() {
         </div>
       )}
 
+
+      {/* Quick prompts */}
+      {!currentQuestion && (
+        <div className="flex items-center justify-center gap-2 flex-wrap">
+          {[
+            "What is your biggest daily challenge in Singapore?",
+            "What should Singapore prioritize in the next 10 years?",
+            "Which one more shiok: SG laksa or Penang laksa?",
+          ].map((prompt) => (
+            <button
+              key={prompt}
+              onClick={() => {
+                setInput(prompt);
+                setTimeout(() => {
+                  handleSubmit();
+                }, 0);
+              }}
+              className="px-3 py-1.5 rounded-full text-xs transition-all hover:bg-white/10 hover:scale-105"
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.10)",
+                backdropFilter: "blur(10px)",
+              }}
+            >
+              <span className="text-white/70 hover:text-white">
+                {prompt}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+      
       {/* Input bar */}
       <div
         className="flex items-center gap-2 px-4 py-3 rounded-2xl"
@@ -151,7 +183,7 @@ export function ChatBar() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask the population a question…"
+          placeholder="Survey Singapore…"
           disabled={loading}
           className="flex-1 bg-transparent text-white text-sm outline-none placeholder:text-white/30 disabled:opacity-50"
           onFocus={(e) => {
