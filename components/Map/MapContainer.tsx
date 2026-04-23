@@ -5,6 +5,7 @@ import Map, { MapRef, NavigationControl, MapMouseEvent } from "react-map-gl/mapb
 import { useFilterStore } from "@/store/filterStore";
 import { SubzoneLayer } from "./SubzoneLayer";
 import { PlanningAreaLayer } from "./PlanningAreaLayer";
+import { PersonaPinsLayer } from "./PersonaPinsLayer";
 import { HoverTooltip } from "./HoverTooltip";
 import {
   SINGAPORE_CENTER,
@@ -109,6 +110,8 @@ export function MapContainer() {
         <NavigationControl position="bottom-right" />
 
         {zoom >= 10 ? <SubzoneLayer /> : <PlanningAreaLayer />}
+
+        <PersonaPinsLayer />
 
         {hoveredFeature && <HoverTooltip feature={hoveredFeature} />}
       </Map>

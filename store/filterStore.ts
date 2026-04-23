@@ -26,13 +26,6 @@ type FilterStore = FilterState & {
   // Map state
   selectedArea: { name: string; type: "subzone" | "planningArea" } | null;
   setSelectedArea: (area: { name: string; type: "subzone" | "planningArea" } | null) => void;
-  // Layer visibility
-  showMRT: boolean;
-  showHDB: boolean;
-  showSchools: boolean;
-  toggleMRT: () => void;
-  toggleHDB: () => void;
-  toggleSchools: () => void;
   // Persona answers panel
   personaAnswers: PersonaAnswer[];
   isLoadingAnswers: boolean;
@@ -66,13 +59,6 @@ export const useFilterStore = create<FilterStore>((set) => ({
 
   selectedArea: null,
   setSelectedArea: (selectedArea) => set({ selectedArea }),
-
-  showMRT: false,
-  showHDB: false,
-  showSchools: false,
-  toggleMRT: () => set((s) => ({ showMRT: !s.showMRT })),
-  toggleHDB: () => set((s) => ({ showHDB: !s.showHDB })),
-  toggleSchools: () => set((s) => ({ showSchools: !s.showSchools })),
 
   personaAnswers: [],
   isLoadingAnswers: false,

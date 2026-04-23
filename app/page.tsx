@@ -2,7 +2,6 @@ import { MapContainer } from "@/components/Map/MapContainer";
 import { FilterPanel } from "@/components/FilterPanel/FilterPanel";
 import { RightPanel } from "@/components/RightPanel/RightPanel";
 import { ChatBar } from "@/components/ChatBar/ChatBar";
-import { LayerToggles } from "@/components/Map/LayerToggles";
 
 export default function Home() {
   return (
@@ -12,9 +11,6 @@ export default function Home() {
 
       {/* Top-left filter panel */}
       <FilterPanel />
-
-      {/* Top-right layer toggles */}
-      <LayerToggles />
 
       {/* Right panel: Stats + Voices tabs */}
       <RightPanel />

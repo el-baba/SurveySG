@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useFilterStore } from "@/store/filterStore";
 import { filtersToSearchParams } from "@/lib/filters";
 import { CHOROPLETH_COLORS, CHOROPLETH_STEPS } from "@/lib/mapbox";
+import { PlanningAreaBordersLayer } from "./PlanningAreaBordersLayer";
 
 export function SubzoneLayer() {
   const filters = useFilterStore();
@@ -53,24 +54,27 @@ export function SubzoneLayer() {
   ];
 
   return (
-    <Source id="subzones" type="geojson" data={data}>
-      <Layer
-        id="subzone-fill"
-        type="fill"
-        paint={{
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          "fill-color": fillColor as any,
-          "fill-opacity": 0.7,
-        }}
-      />
-      <Layer
-        id="subzone-outline"
-        type="line"
-        paint={{
-          "line-color": "rgba(148, 163, 184, 0.3)",
-          "line-width": 0.5,
-        }}
-      />
-    </Source>
+    <>
+      <Source id="subzones" type="geojson" data={data}>
+        <Layer
+          id="subzone-fill"
+          type="fill"
+          paint={{
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            "fill-color": fillColor as any,
+            "fill-opacity": 0.7,
+          }}
+        />
+        <Layer
+          id="subzone-outline"
+          type="line"
+          paint={{
+            "line-color": "rgba(148, 163, 184, 0.3)",
+            "line-width": 0.5,
+          }}
+        />
+      </Source>
+      <PlanningAreaBordersLayer />
+    </>
   );
 }
