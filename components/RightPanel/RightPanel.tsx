@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useFilterStore } from "@/store/filterStore";
 import { StatsPanel } from "@/components/StatsPanel/StatsPanel";
 import { PersonaAnswersPanel } from "@/components/PersonaAnswers/PersonaAnswersPanel";
@@ -10,25 +10,30 @@ type Tab = "stats" | "voices";
 
 export function RightPanel() {
   const [activeTab, setActiveTab] = useState<Tab>("stats");
+  const [isMinimized, setIsMinimized] = useState(true);
   const {
     subzone,
     planningArea,
-    setSubzone,
-    setPlanningArea,
     showAnswersPanel,
     personaAnswers,
-    clearPersonaAnswers,
   } = useFilterStore();
 
   const selectedArea = subzone ?? planningArea;
-  const isVisible = !!selectedArea || showAnswersPanel;
 
   // Auto-switch to voices tab when answers panel activates
   useEffect(() => {
     if (showAnswersPanel) setActiveTab("voices");
   }, [showAnswersPanel]);
 
-  if (!isVisible) return null;
+  // Auto-expand when an area is selected on the map
+  useEffect(() => {
+    if (selectedArea) setIsMinimized(false);
+  }, [selectedArea]);
+
+  // Auto-expand when persona replies arrive
+  useEffect(() => {
+    if (showAnswersPanel || personaAnswers.length > 0) setIsMinimized(false);
+  }, [showAnswersPanel, personaAnswers.length]);
 
   const voicesCount = personaAnswers.length;
 
@@ -41,50 +46,55 @@ export function RightPanel() {
         borderTop: "1px solid var(--glass-border-highlight)",
         backdropFilter: "blur(20px)",
         boxShadow: "var(--glass-shadow)",
-        maxHeight: "calc(100vh - 2rem)",
+        maxHeight: isMinimized ? undefined : "calc(100vh - 2rem)",
       }}
     >
-      {/* Panel header with area name + close */}
+      {/* Panel header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 flex-shrink-0">
         <div>
           <p className="font-semibold text-white/90 text-sm">
             {selectedArea ?? "Voices"}
           </p>
+          {isMinimized && (
+            <p className="text-[11px] text-white/30 mt-0.5">
+              {selectedArea ? "Stats · Voices" : "Singapore · Stats"}
+            </p>
+          )}
         </div>
         <button
-          onClick={() => {
-            setSubzone(null);
-            setPlanningArea(null);
-            clearPersonaAnswers();
-          }}
+          onClick={() => setIsMinimized((m) => !m)}
           className="text-white/30 hover:text-white/70 transition-colors"
         >
-          <X size={16} />
+          {isMinimized ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
         </button>
       </div>
 
-      {/* Tab bar */}
-      <div className="flex px-4 pt-2 pb-0 gap-1 flex-shrink-0">
-        <TabButton
-          active={activeTab === "stats"}
-          onClick={() => setActiveTab("stats")}
-          disabled={!selectedArea}
-        >
-          Stats
-        </TabButton>
-        <TabButton
-          active={activeTab === "voices"}
-          onClick={() => setActiveTab("voices")}
-        >
-          Voices{voicesCount > 0 ? ` (${voicesCount})` : ""}
-        </TabButton>
-      </div>
+      {!isMinimized && (
+        <>
+          {/* Tab bar */}
+          <div className="flex px-4 pt-2 pb-0 gap-1 flex-shrink-0">
+            <TabButton
+              active={activeTab === "stats"}
+              onClick={() => setActiveTab("stats")}
+              disabled={!selectedArea}
+            >
+              Stats
+            </TabButton>
+            <TabButton
+              active={activeTab === "voices"}
+              onClick={() => setActiveTab("voices")}
+            >
+              Voices{voicesCount > 0 ? ` (${voicesCount})` : ""}
+            </TabButton>
+          </div>
 
-    {/* Tab content */}
-    <div className="flex-1 overflow-y-auto mask-fade custom-scrollbar min-h-0 pt-6">
-      {activeTab === "stats" && <StatsPanel />}
-      {activeTab === "voices" && <PersonaAnswersPanel />}
-    </div>
+          {/* Tab content */}
+          <div className="flex-1 overflow-y-auto mask-fade custom-scrollbar min-h-0 pt-6">
+            {activeTab === "stats" && <StatsPanel />}
+            {activeTab === "voices" && <PersonaAnswersPanel />}
+          </div>
+        </>
+      )}
     </div>
   );
 }
