@@ -6,7 +6,7 @@ import { Providers } from "./providers";
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SurveySG — Ask Singapore",
+  title: "SurveySG",
   description: "Interactive population explorer for Singapore using synthetic personas",
 };
 

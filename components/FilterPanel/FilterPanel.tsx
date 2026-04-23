@@ -47,8 +47,8 @@ export function FilterPanel() {
           <SlidersHorizontal size={16} className="text-white/50" />
           <span>Filters</span>
           {hasFilters && (
-            <span className="ml-1 px-1.5 py-0.5 rounded-full bg-white/15 text-white/80 text-xs font-bold">
-              active
+            <span className="ml-1 px-1.5 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-bold animate-pulse border border-white/20">
+              ACTIVE
             </span>
           )}
         </div>
@@ -76,19 +76,19 @@ export function FilterPanel() {
           {/* Sex */}
           <FilterSection label="Sex">
             <div className="flex gap-2">
-              {SEX_OPTIONS.map(({ value, label }) => (
-                <button
-                  key={value}
-                  onClick={() => setSex(value)}
-                  className={`flex-1 py-1 rounded-lg text-xs font-medium transition-colors ${
-                    sex === value
-                      ? "bg-white/15 text-white"
-                      : "bg-white/5 text-white/40 hover:bg-white/10"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
+            {SEX_OPTIONS.map(({ value, label }) => (
+              <button
+                key={value}
+                onClick={() => setSex(value)}
+                className={`flex-1 py-1 rounded-lg text-xs font-medium transition-all duration-200 border ${
+                  sex === value
+                    ? "bg-white/20 text-white border-white/40 filter-active-glow"
+                    : "bg-white/5 text-white/40 border-transparent hover:bg-white/10"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
             </div>
           </FilterSection>
 
@@ -104,49 +104,58 @@ export function FilterPanel() {
           {/* Marital Status */}
           <FilterSection label="Marital Status">
             <div className="flex flex-wrap gap-1.5">
-              {MARITAL_STATUS_OPTIONS.map((m) => (
+            {MARITAL_STATUS_OPTIONS.map((m) => {
+              const isActive = maritalStatus.includes(m);
+              return (
                 <button
                   key={m}
                   onClick={() =>
                     setMaritalStatus(
-                      maritalStatus.includes(m)
+                      isActive
                         ? maritalStatus.filter((s) => s !== m)
                         : [...maritalStatus, m]
                     )
                   }
-                  className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
-                    maritalStatus.includes(m)
-                      ? "bg-white/15 text-white"
-                      : "bg-white/5 text-white/40 hover:bg-white/10"
+                  className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-200 border ${
+                    isActive
+                      ? "bg-white/20 text-white border-white/40 filter-active-glow"
+                      : "bg-white/5 text-white/40 border-transparent hover:bg-white/10"
                   }`}
                 >
                   {m}
                 </button>
-              ))}
+              );
+            })}
             </div>
           </FilterSection>
 
           {/* Education Level */}
           <FilterSection label="Education Level">
-            <select
-              value={educationLevel[0] ?? ""}
-              onChange={(e) =>
-                setEducationLevel(e.target.value ? [e.target.value] : [])
-              }
-              className="w-full rounded-lg px-3 py-1.5 text-xs font-medium transition-colors cursor-pointer"
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                color: educationLevel.length ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.4)",
-              }}
-            >
-              <option value="">Any level...</option>
-              {EDUCATION_LEVEL_OPTIONS.map((opt) => (
-                <option key={opt} value={opt} style={{ background: "#1a1a2e", color: "#fff" }}>
-                  {opt}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                value={educationLevel[0] ?? ""}
+                onChange={(e) =>
+                  setEducationLevel(e.target.value ? [e.target.value] : [])
+                }
+                className={`w-full appearance-none rounded-lg px-3 py-2 text-xs font-medium transition-all cursor-pointer border outline-none ${
+                  educationLevel.length > 0 
+                    ? "border-white/40 bg-white/20 text-white filter-active-glow" 
+                    : "border-white/10 bg-white/5 text-white/40 hover:bg-white/10"
+                }`}
+              >
+                <option value="" className="bg-[#1a1a2e]">Any level...</option>
+                {EDUCATION_LEVEL_OPTIONS.map((opt) => (
+                  <option key={opt} value={opt} className="bg-[#1a1a2e] text-white">
+                    {opt}
+                  </option>
+                ))}
+              </select>
+              
+              {/* Custom Chevron so it doesn't use the default browser one */}
+              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-white/30">
+                <ChevronDown size={14} />
+              </div>
+            </div>
           </FilterSection>
         </div>
       )}

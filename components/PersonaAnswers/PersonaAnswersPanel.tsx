@@ -66,7 +66,7 @@ export function PersonaAnswersPanel() {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 min-h-0">
+      <div className="flex-1 overflow-y-auto px-4 pt-2 pb-8 space-y-3 min-h-0 scrollbar-thin">
         {/* Summary block */}
         {showSummarySection && (
           <div

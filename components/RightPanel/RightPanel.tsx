@@ -80,11 +80,11 @@ export function RightPanel() {
         </TabButton>
       </div>
 
-      {/* Tab content */}
-      <div className="flex-1 overflow-hidden min-h-0">
-        {activeTab === "stats" && <StatsPanel />}
-        {activeTab === "voices" && <PersonaAnswersPanel />}
-      </div>
+    {/* Tab content */}
+    <div className="flex-1 overflow-y-auto mask-fade custom-scrollbar min-h-0 pt-6">
+      {activeTab === "stats" && <StatsPanel />}
+      {activeTab === "voices" && <PersonaAnswersPanel />}
+    </div>
     </div>
   );
 }
