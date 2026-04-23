@@ -1,31 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { applyFiltersToQuery, parseFiltersFromSearchParams, DEFAULT_FILTERS } from "@/lib/filters";
 
 export async function GET(req: NextRequest) {
   const p = req.nextUrl.searchParams;
   const groupBy = p.get("groupBy") ?? "subzone";
+  const groupCol = groupBy === "planning_area" ? "planning_area" : "subzone";
 
-  const rpcName =
-    groupBy === "planning_area"
-      ? "count_personas_by_planning_area"
-      : "count_personas_by_subzone";
+  const filters = { ...DEFAULT_FILTERS, ...parseFiltersFromSearchParams(p) };
 
-  const rpcArgs = {
-    p_sex: p.get("sex") ?? null,
-    p_age_min: p.get("ageMin") ? Number(p.get("ageMin")) : null,
-    p_age_max: p.get("ageMax") ? Number(p.get("ageMax")) : null,
-    p_marital_status: p.get("maritalStatus") ? p.get("maritalStatus")!.split(",") : null,
-    p_education_level: p.get("educationLevel") ? p.get("educationLevel")!.split(",") : null,
-    p_planning_area: p.get("planningArea") ?? null,
-    p_subzone: p.get("subzone") ?? null,
-  };
+  let query = supabase
+    .from("personas")
+    .select(groupCol)
+    .limit(200_000);
 
-  const { data, error } = await supabase.rpc(rpcName, rpcArgs);
+  query = applyFiltersToQuery(query, filters);
+
+  const { data, error } = await query;
 
   if (error) {
-    console.error("count rpc error:", error);
+    console.error("count error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json(data ?? []);
+  // Group by the selected column in JS
+  const counts: Record<string, number> = {};
+  for (const row of data ?? []) {
+    const key = (row as Record<string, string>)[groupCol];
+    if (key) counts[key] = (counts[key] ?? 0) + 1;
+  }
+
+  const result = Object.entries(counts).map(([key, count]) => ({
+    [groupCol]: key,
+    count,
+  }));
+
+  return NextResponse.json(result);
 }
