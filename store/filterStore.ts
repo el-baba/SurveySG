@@ -11,6 +11,14 @@ export type PersonaAnswer = {
   sentiment: "positive" | "negative";
 };
 
+export type ChatMessage = {
+  role: "user" | "persona";
+  content: string;
+  timestamp: number;
+};
+
+type ChatMode = "survey" | "persona";
+
 type FilterStore = FilterState & {
   setSex: (sex: Sex) => void;
   setAgeRange: (min: number, max: number) => void;
@@ -29,6 +37,7 @@ type FilterStore = FilterState & {
   currentQuestion: string;
   showAnswersPanel: boolean;
   setPersonaAnswers: (answers: PersonaAnswer[]) => void;
+  appendPersonaAnswers: (answers: PersonaAnswer[]) => void;
   setIsLoadingAnswers: (loading: boolean) => void;
   setCurrentQuestion: (q: string) => void;
   setShowAnswersPanel: (show: boolean) => void;
@@ -38,6 +47,29 @@ type FilterStore = FilterState & {
   isSummaryLoading: boolean;
   setSummaryText: (t: string) => void;
   setIsSummaryLoading: (v: boolean) => void;
+  // Persona pin coordinates (personaId -> [lng, lat])
+  personaCoordinates: Record<string, [number, number]>;
+  setPersonaCoordinates: (coords: Record<string, [number, number]>) => void;
+  // Focused persona (for map fly-to)
+  focusedPersonaId: string | null;
+  setFocusedPersonaId: (id: string | null) => void;
+  // Selected persona (for pin highlight)
+  selectedPersonaId: string | null;
+  setSelectedPersonaId: (id: string | null) => void;
+  // Incremented when the user deselects — tells the map to fly back to overview
+  resetViewCounter: number;
+  incrementResetView: () => void;
+  // Private persona chat
+  chatMode: ChatMode;
+  privateChatPersona: PersonaAnswer | null;
+  privateChatMessages: ChatMessage[];
+  isPrivateChatLoading: boolean;
+  streamingPersonaReply: string;
+  startPrivateChat: (persona: PersonaAnswer) => void;
+  endPrivateChat: () => void;
+  appendPrivateChatMessage: (msg: ChatMessage) => void;
+  setIsPrivateChatLoading: (v: boolean) => void;
+  setStreamingPersonaReply: (v: string) => void;
 };
 
 export const useFilterStore = create<FilterStore>((set) => ({
@@ -60,14 +92,37 @@ export const useFilterStore = create<FilterStore>((set) => ({
   currentQuestion: "",
   showAnswersPanel: false,
   setPersonaAnswers: (personaAnswers) => set({ personaAnswers }),
+  appendPersonaAnswers: (answers) => set((s) => ({ personaAnswers: [...s.personaAnswers, ...answers] })),
   setIsLoadingAnswers: (isLoadingAnswers) => set({ isLoadingAnswers }),
   setCurrentQuestion: (currentQuestion) => set({ currentQuestion }),
   setShowAnswersPanel: (showAnswersPanel) => set({ showAnswersPanel }),
   clearPersonaAnswers: () =>
-    set({ personaAnswers: [], showAnswersPanel: false, currentQuestion: "", summaryText: "", isSummaryLoading: false }),
+    set({ personaAnswers: [], showAnswersPanel: false, currentQuestion: "", summaryText: "", isSummaryLoading: false, selectedPersonaId: null }),
 
   summaryText: "",
   isSummaryLoading: false,
   setSummaryText: (summaryText) => set({ summaryText }),
   setIsSummaryLoading: (isSummaryLoading) => set({ isSummaryLoading }),
+
+  personaCoordinates: {},
+  setPersonaCoordinates: (personaCoordinates) => set({ personaCoordinates }),
+  focusedPersonaId: null,
+  setFocusedPersonaId: (focusedPersonaId) => set({ focusedPersonaId }),
+  selectedPersonaId: null,
+  setSelectedPersonaId: (selectedPersonaId) => set({ selectedPersonaId }),
+  resetViewCounter: 0,
+  incrementResetView: () => set((s) => ({ resetViewCounter: s.resetViewCounter + 1 })),
+
+  chatMode: "survey",
+  privateChatPersona: null,
+  privateChatMessages: [],
+  isPrivateChatLoading: false,
+  streamingPersonaReply: "",
+  startPrivateChat: (persona) =>
+    set({ chatMode: "persona", privateChatPersona: persona, privateChatMessages: [], streamingPersonaReply: "" }),
+  endPrivateChat: () =>
+    set({ chatMode: "survey", privateChatPersona: null, privateChatMessages: [], isPrivateChatLoading: false, streamingPersonaReply: "" }),
+  appendPrivateChatMessage: (msg) => set((s) => ({ privateChatMessages: [...s.privateChatMessages, msg] })),
+  setIsPrivateChatLoading: (isPrivateChatLoading) => set({ isPrivateChatLoading }),
+  setStreamingPersonaReply: (streamingPersonaReply) => set({ streamingPersonaReply }),
 }));

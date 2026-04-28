@@ -1,14 +1,10 @@
 "use client";
 
-import { useCallback } from "react";
 import { Source, Layer } from "react-map-gl/mapbox";
 import { useQuery } from "@tanstack/react-query";
-import { useFilterStore } from "@/store/filterStore";
-import { filtersToSearchParams } from "@/lib/filters";
-import { CHOROPLETH_COLORS, CHOROPLETH_STEPS } from "@/lib/mapbox";
 
-export function PlanningAreaLayer() {
-  const filters = useFilterStore();
+export function PlanningAreaLayer({ paCountMap }: { paCountMap: Map<string, number> }) {
+  void paCountMap;
 
   const { data: geojson } = useQuery({
     queryKey: ["boundaries", "planning-areas"],
@@ -16,55 +12,12 @@ export function PlanningAreaLayer() {
     staleTime: Infinity,
   });
 
-  const params = filtersToSearchParams(filters);
-  const { data: counts } = useQuery({
-    queryKey: ["personas", "count", "pa", params.toString()],
-    queryFn: () =>
-      fetch(`/api/personas/count?${params}&groupBy=planning_area`).then((r) =>
-        r.json()
-      ) as Promise<Array<{ planning_area: string; count: number }>>,
-    placeholderData: [],
-  });
-
-  const enrichedGeoJSON = useCallback(() => {
-    if (!geojson) return null;
-    const countMap = new Map(
-      (counts ?? []).map((c) => [c.planning_area?.toLowerCase(), c.count])
-    );
-    return {
-      ...geojson,
-      features: (geojson.features as GeoJSON.Feature[]).map((f) => ({
-        ...f,
-        properties: {
-          ...f.properties,
-          personaCount:
-            countMap.get((f.properties?.name ?? "").toLowerCase()) ?? 0,
-        },
-      })),
-    };
-  }, [geojson, counts]);
-
-  const data = enrichedGeoJSON();
-  if (!data) return null;
-
-  const fillColor = [
-    "step",
-    ["get", "personaCount"],
-    CHOROPLETH_COLORS[0],
-    ...CHOROPLETH_STEPS.slice(1).flatMap((step, i) => [step, CHOROPLETH_COLORS[i + 1]]),
-  ];
+  if (!geojson) return null;
 
   return (
-    <Source id="planning-areas" type="geojson" data={data}>
-      <Layer
-        id="planning-area-fill"
-        type="fill"
-        paint={{
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          "fill-color": fillColor as any,
-          "fill-opacity": 0.65,
-        }}
-      />
+    <Source id="planning-areas" type="geojson" data={geojson}>
+      {/* Invisible fill — required for mouse hit-testing */}
+      <Layer id="planning-area-fill" type="fill" paint={{ "fill-opacity": 0 }} />
       <Layer
         id="planning-area-outline"
         type="line"

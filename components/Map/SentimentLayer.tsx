@@ -33,7 +33,7 @@ export function SentimentLayer() {
       features: (geojson.features as GeoJSON.Feature[]).map((f) => {
         const key = (f.properties?.name ?? "").toLowerCase();
         const counts = sentimentMap.get(key);
-        let sentimentColor = "";
+        let sentimentColor = "rgba(0,0,0,0)"; // transparent for no-response areas
         if (counts) {
           if (counts.pos > 0 && counts.neg === 0) sentimentColor = "#22c55e";
           else if (counts.neg > 0 && counts.pos === 0) sentimentColor = "#ef4444";
@@ -51,11 +51,11 @@ export function SentimentLayer() {
       <Layer
         id="sentiment-fill"
         type="fill"
+        beforeId="persona-pins-shadow"
         paint={{
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          "fill-color": ["case", ["!=", ["get", "sentimentColor"], ""], ["get", "sentimentColor"], "#000000"] as any,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          "fill-opacity": ["case", ["!=", ["get", "sentimentColor"], ""], 0.45, 0.0] as any,
+          "fill-color": ["get", "sentimentColor"] as any,
+          "fill-opacity": 0.55,
         }}
       />
     </Source>

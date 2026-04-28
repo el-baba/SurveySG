@@ -131,30 +131,29 @@ export function FilterPanel() {
 
           {/* Education Level */}
           <FilterSection label="Education Level">
-            <div className="relative">
-              <select
-                value={educationLevel[0] ?? ""}
-                onChange={(e) =>
-                  setEducationLevel(e.target.value ? [e.target.value] : [])
-                }
-                className={`w-full appearance-none rounded-lg px-3 py-2 text-xs font-medium transition-all cursor-pointer border outline-none ${
-                  educationLevel.length > 0 
-                    ? "border-white/40 bg-white/20 text-white filter-active-glow" 
-                    : "border-white/10 bg-white/5 text-white/40 hover:bg-white/10"
-                }`}
-              >
-                <option value="" className="bg-[#1a1a2e]">Any level...</option>
-                {EDUCATION_LEVEL_OPTIONS.map((opt) => (
-                  <option key={opt} value={opt} className="bg-[#1a1a2e] text-white">
+            <div className="flex flex-wrap gap-1.5">
+              {EDUCATION_LEVEL_OPTIONS.map((opt) => {
+                const isActive = educationLevel.includes(opt);
+                return (
+                  <button
+                    key={opt}
+                    onClick={() =>
+                      setEducationLevel(
+                        isActive
+                          ? educationLevel.filter((e) => e !== opt)
+                          : [...educationLevel, opt]
+                      )
+                    }
+                    className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-200 border ${
+                      isActive
+                        ? "bg-white/20 text-white border-white/40 filter-active-glow"
+                        : "bg-white/5 text-white/40 border-transparent hover:bg-white/10"
+                    }`}
+                  >
                     {opt}
-                  </option>
-                ))}
-              </select>
-              
-              {/* Custom Chevron so it doesn't use the default browser one */}
-              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-white/30">
-                <ChevronDown size={14} />
-              </div>
+                  </button>
+                );
+              })}
             </div>
           </FilterSection>
         </div>

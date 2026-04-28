@@ -1,39 +1,42 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
-import { PersonaAnswer } from "@/store/filterStore";
+import { PersonaAnswer, useFilterStore } from "@/store/filterStore";
 
-const AVATAR_COLORS = [
-  "linear-gradient(135deg, #3b82f6, #2dd4bf)",
-  "linear-gradient(135deg, #8b5cf6, #ec4899)",
-  "linear-gradient(135deg, #f59e0b, #d946ef)",
-  "linear-gradient(135deg, #10b981, #3b82f6)",
-  "linear-gradient(135deg, #6366f1, #a855f7)",
-];
-
-function getAvatarGradient(name: string) {
-  const hash = name.split("").reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0);
-  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
-}
-
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .slice(0, 2)
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
-}
+import { getAvatarGradient, getInitials } from "@/lib/avatar";
 
 export function PersonaCard({ answer }: { answer: PersonaAnswer }) {
   const dynamicBg = getAvatarGradient(answer.name);
+  const setFocusedPersonaId = useFilterStore((s) => s.setFocusedPersonaId);
+  const setSelectedPersonaId = useFilterStore((s) => s.setSelectedPersonaId);
+  const selectedPersonaId = useFilterStore((s) => s.selectedPersonaId);
+  const incrementResetView = useFilterStore((s) => s.incrementResetView);
+  const isSelected = selectedPersonaId === answer.personaId;
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isSelected && cardRef.current) {
+      cardRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [isSelected]);
+
   return (
     <div
-      className="rounded-xl p-3 border transition-colors"
+      ref={cardRef}
+      className="rounded-xl p-3 border transition-colors cursor-pointer hover:border-white/20 hover:bg-white/10"
       style={{
-        background: "rgba(255,255,255,0.05)",
-        borderColor: "rgba(255,255,255,0.08)",
+        background: isSelected ? "rgba(251,191,36,0.1)" : "rgba(255,255,255,0.05)",
+        borderColor: isSelected ? "rgba(251,191,36,0.4)" : "rgba(255,255,255,0.08)",
+      }}
+      onClick={() => {
+        if (isSelected) {
+          setSelectedPersonaId(null);
+          incrementResetView();
+        } else {
+          setFocusedPersonaId(answer.personaId);
+          setSelectedPersonaId(answer.personaId);
+        }
       }}
     >
       {/* Top row: avatar + name + demographics */}

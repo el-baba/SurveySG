@@ -1,5 +1,5 @@
 export const SINGAPORE_CENTER: [number, number] = [103.8198, 1.3521];
-export const SINGAPORE_ZOOM = 11;
+export const SINGAPORE_ZOOM = 10.3;
 
 export const SINGAPORE_BOUNDS: [[number, number], [number, number]] = [
   [103.4, 1.1],  // SW

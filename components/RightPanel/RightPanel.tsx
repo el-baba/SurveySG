@@ -3,27 +3,19 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useFilterStore } from "@/store/filterStore";
-import { StatsPanel } from "@/components/StatsPanel/StatsPanel";
 import { PersonaAnswersPanel } from "@/components/PersonaAnswers/PersonaAnswersPanel";
 
-type Tab = "stats" | "voices";
-
 export function RightPanel() {
-  const [activeTab, setActiveTab] = useState<Tab>("stats");
   const [isMinimized, setIsMinimized] = useState(true);
   const {
     subzone,
     planningArea,
     showAnswersPanel,
     personaAnswers,
+    selectedPersonaId,
   } = useFilterStore();
 
   const selectedArea = subzone ?? planningArea;
-
-  // Auto-switch to voices tab when answers panel activates
-  useEffect(() => {
-    if (showAnswersPanel) setActiveTab("voices");
-  }, [showAnswersPanel]);
 
   // Auto-expand when an area is selected on the map
   useEffect(() => {
@@ -34,6 +26,11 @@ export function RightPanel() {
   useEffect(() => {
     if (showAnswersPanel || personaAnswers.length > 0) setIsMinimized(false);
   }, [showAnswersPanel, personaAnswers.length]);
+
+  // Auto-expand when a persona pin is selected on the map
+  useEffect(() => {
+    if (selectedPersonaId) setIsMinimized(false);
+  }, [selectedPersonaId]);
 
   const voicesCount = personaAnswers.length;
 
@@ -57,7 +54,7 @@ export function RightPanel() {
           </p>
           {isMinimized && (
             <p className="text-[11px] text-white/30 mt-0.5">
-              {selectedArea ? "Stats · Voices" : "Singapore · Stats"}
+              {voicesCount > 0 ? `${voicesCount} response${voicesCount !== 1 ? "s" : ""}` : "No responses yet"}
             </p>
           )}
         </div>
@@ -70,57 +67,10 @@ export function RightPanel() {
       </div>
 
       {!isMinimized && (
-        <>
-          {/* Tab bar */}
-          <div className="flex px-4 pt-2 pb-0 gap-1 flex-shrink-0">
-            <TabButton
-              active={activeTab === "stats"}
-              onClick={() => setActiveTab("stats")}
-              disabled={!selectedArea}
-            >
-              Stats
-            </TabButton>
-            <TabButton
-              active={activeTab === "voices"}
-              onClick={() => setActiveTab("voices")}
-            >
-              Voices{voicesCount > 0 ? ` (${voicesCount})` : ""}
-            </TabButton>
-          </div>
-
-          {/* Tab content */}
-          <div className="flex-1 overflow-y-auto mask-fade custom-scrollbar min-h-0 pt-6">
-            {activeTab === "stats" && <StatsPanel />}
-            {activeTab === "voices" && <PersonaAnswersPanel />}
-          </div>
-        </>
+        <div className="flex-1 overflow-y-auto mask-fade custom-scrollbar min-h-0 pt-2">
+          <PersonaAnswersPanel />
+        </div>
       )}
     </div>
-  );
-}
-
-function TabButton({
-  active,
-  onClick,
-  disabled,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  disabled?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed ${
-        active
-          ? "bg-white/10 text-white border border-white/15"
-          : "text-white/40 hover:text-white/70 hover:bg-white/5"
-      }`}
-    >
-      {children}
-    </button>
   );
 }
